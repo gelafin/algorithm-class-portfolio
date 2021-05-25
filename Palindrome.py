@@ -3,6 +3,14 @@
 # Description: Two implementations of k-palindrome solutions with different time complexities
 
 
+class PalindromeInputError(Exception):
+    """Exception raised when caller input is invalid"""
+
+    def __init__(self, expression, message):
+        self.expression = expression
+        self.message = message
+
+
 def is_valid_palindrome_input(string):
     """
     Determines whether a given string meets validation requirements for the cs325 portfolio assignment
@@ -19,11 +27,11 @@ def is_valid_palindrome_input(string):
 def is_palindrome(string):
     """
     Determines whether a given string is a palindrome or not
-    :param string: any string to test
+    :param string: any non-empty string to test
     :return: True if the string is a palindrome; False if not
     """
     if not is_valid_palindrome_input(string):
-        raise Exception  # TODO: make exception
+        raise PalindromeInputError
 
     # traverse string inwards from both ends
     index_left = 0
@@ -45,10 +53,13 @@ def checkPalindrome_1(string, k):
     Determines whether a given string is a k-palindrome or not
     A k-palindrome string is a string that becomes a palindrome when 0-k characters are removed
     BRUTE FORCE implementation
-    :param string: any string to test
+    :param string: any non-empty string to test
     :param k: int for the number of allowed character removals
     :return: True if the string is a k-palindrome; False if not
     """
+    if not is_valid_palindrome_input(string):
+        raise PalindromeInputError
+
     # special case: no characters need to be removed to form a palindrome
     if is_palindrome(string):
         return True
@@ -70,10 +81,13 @@ def checkPalindrome_2(string, k):
     Determines whether a given string is a k-palindrome or not
     A k-palindrome string is a string that becomes a palindrome when 0-k characters are removed
     OPTIMIZED implementation
-    :param string: any string to test
+    :param string: any non-empty string to test
     :param k: int for the number of allowed character removals
     :return: True if the string is k-palindrome; False if not
     """
+    if not is_valid_palindrome_input(string):
+        raise PalindromeInputError
+
     # traverse string inwards from both ends
     index_left = 0
     index_right = -1
