@@ -6,10 +6,6 @@
 class PalindromeInputError(Exception):
     """Exception raised when caller input is invalid"""
 
-    def __init__(self, expression, message):
-        self.expression = expression
-        self.message = message
-
 
 def is_valid_palindrome_input(string):
     """
@@ -128,6 +124,9 @@ def checkPalindrome_2(string, k):
 
 
 if __name__ == '__main__':
+    # test input validation
+    # print('expecting Exception', is_palindrome(''))
+
     # some mild tests for is_palindrome helper
     # print('expecting True', is_palindrome('aba'))
     # print('expecting True', is_palindrome('abba'))
