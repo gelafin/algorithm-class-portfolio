@@ -32,7 +32,7 @@ def is_palindrome(string):
     # traverse string inwards from both ends
     index_left = 0
     index_right = -1
-    while len(string) > index_left >= index_right:
+    while len(string)//2 >= index_left >= index_right:
         # compare this pair of chars
         if string[index_left] != string[index_right]:
             return False
