@@ -4,6 +4,7 @@
 
 
 import math
+from queue import SimpleQueue
 
 
 def get_tesla_neighbors(node, highest_x, highest_y):
@@ -44,9 +45,10 @@ def getTesla(M):
     max_hp_table[0][0] = M[0][0]
 
     # fill the max hp table by visiting every valid node
-    itinerary = {(0, 0)}  # nodes stored as (x, y) coordinates
-    while len(itinerary) > 0:
-        current_node = itinerary.pop()
+    itinerary = SimpleQueue()
+    itinerary.put((0, 0))  # nodes stored as (x, y) coordinates
+    while itinerary.qsize() > 0:
+        current_node = itinerary.get()
         current_x, current_y = current_node
         current_node_max_hp = max_hp_table[current_x][current_y]
 
@@ -60,7 +62,7 @@ def getTesla(M):
             max_hp_table[neighbor_x][neighbor_y] = neighbor_max_hp
 
             # we need to visit their neighbors too
-            itinerary.add(neighbor)
+            itinerary.put(neighbor)
 
     # if max hp path is > 0, return 0 bc no health is needed
     final_max_hp = max_hp_table[len(max_hp_table[0]) - 1][len(max_hp_table) - 1]
