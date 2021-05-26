@@ -62,10 +62,9 @@ def patternmatch(string, p):
     index_string = 0
     for index_p in range(len(p)):
         if not is_wildcard(p[index_p]):
-            if p[index_p] == string[index_string]:
-                # chars match; step string pointer if there's more to compare
-                if not is_index_of_last_non_wildcard(index_p, p):
-                    index_string += 1
+            if p[index_p] == string[index_string] and not is_index_of_last_non_wildcard(index_p, p):
+                # chars match; step string pointer, because there's more to compare
+                index_string += 1
             elif index_p > 0:
                 previous_pattern_char = p[index_p - 1]
 
