@@ -26,6 +26,26 @@ def is_wildcard(char):
     return False
 
 
+def is_index_of_last_non_wildcard(index, string):
+    """
+    Determines whether a given index is the index of the last char in a given string
+    :param index: int of a valid index in string
+    :param string: any string to test
+    :return: True if the index is of the last char in string; False if not
+    """
+    # TODO: raise argument_error if invalid index
+    index += 1
+    while index < len(string):
+        if string[index] not in pattern_matcher.wildcard_chars:
+            # there is another non-wildcard later in the string
+            return False
+
+        index += 1
+
+    # passed the check
+    return True
+
+
 def patternmatch(string, p):
     """
     Determines whether a given pattern matches a given string
@@ -43,8 +63,9 @@ def patternmatch(string, p):
     for index_p in range(len(p)):
         if not is_wildcard(p[index_p]):
             if p[index_p] == string[index_string]:
-                # chars match; step string pointer
-                index_string += 1
+                # chars match; step string pointer if there's more to compare
+                if not is_index_of_last_non_wildcard(index_p, p):
+                    index_string += 1
             elif index_p > 0:
                 previous_pattern_char = p[index_p - 1]
 
@@ -54,9 +75,7 @@ def patternmatch(string, p):
                 elif previous_pattern_char == MATCH_1:
                     # probe string by 1 char; are we ok?
                     index_string += 1
-                    if string[index_string] == p[index_p]:
-                        index_string += 1
-                    else:
+                    if string[index_string] != p[index_p]:
                         # match-1 wildcard was used with no match
                         return False
             else:
@@ -67,7 +86,7 @@ def patternmatch(string, p):
     if index_string < len(string) - 1:
         if p[-1] == MATCH_1:
             index_string += 1
-            if string[index_string] != p[-1]:
+            if index_string < len(string) - 1:
                 return False
         elif p[-1] != MATCH_ALL:
             # string has unmatched chars at the end
@@ -78,72 +97,73 @@ def patternmatch(string, p):
 
 if __name__ == '__main__':
     # test
-    # string = 'abcde'
-    # pattern = '*'
-    # expected = True
-    # result = patternmatch(string, pattern)
-    # if result != expected:
-    #     print('! test 1 expected', expected, 'but got', result)
-    #
-    # string = 'abcde'
-    # pattern = '*a?c*'
-    # expected = True
-    # result = patternmatch(string, pattern)
-    # if result != expected:
-    #     print('! test 2 expected', expected, 'but got', result)
-    #
-    # string = 'abcde'
-    # pattern = '*a?c'
-    # expected = False
-    # result = patternmatch(string, pattern)
-    # if result != expected:
-    #     print('! test 3 expected', expected, 'but got', result)
-    #
-    # string = 'abcde'
-    # pattern = '*a?c*'
-    # expected = True
-    # result = patternmatch(string, pattern)
-    # if result != expected:
-    #     print('! test 4 expected', expected, 'but got', result)
-    #
-    # string = 'abcde'
-    # pattern = 'a*'
-    # expected = True
-    # result = patternmatch(string, pattern)
-    # if result != expected:
-    #     print('! test 5 expected', expected, 'but got', result)
-    #
-    # string = 'abcde'
-    # pattern = 'ae'
-    # expected = False
-    # result = patternmatch(string, pattern)
-    # if result != expected:
-    #     print('! test 6 expected', expected, 'but got', result)
-    #
-    # string = 'abcde'
-    # pattern = 'ad?'
-    # expected = False
-    # result = patternmatch(string, pattern)
-    # if result != expected:
-    #     print('! test 7 expected', expected, 'but got', result)
-    #
-    # string = 'abcde'
-    # pattern = 'abc?'
-    # expected = False
-    # result = patternmatch(string, pattern)
-    # if result != expected:
-    #     print('! test 8 expected', expected, 'but got', result)
-    #
-    # string = 'abcde'
-    # pattern = 'abcd?'
-    # expected = True
-    # result = patternmatch(string, pattern)
-    # if result != expected:
-    #     print('! test 9 expected', expected, 'but got', result)
-    #
-    # string = 'a'
-    # pattern = '?'
-    # expected = True
-    # result = patternmatch(string, pattern)
-    # if result != expected:
-    #     print('! test 10 expected', expected, 'but got', result)
+    string = 'abcde'
+    pattern = '*'
+    expected = True
+    result = patternmatch(string, pattern)
+    if result != expected:
+        print('! test 1 expected', expected, 'but got', result)
+
+    string = 'abcde'
+    pattern = '*a?c*'
+    expected = True
+    result = patternmatch(string, pattern)
+    if result != expected:
+        print('! test 2 expected', expected, 'but got', result)
+
+    string = 'abcde'
+    pattern = '*a?c'
+    expected = False
+    result = patternmatch(string, pattern)
+    if result != expected:
+        print('! test 3 expected', expected, 'but got', result)
+
+    string = 'abcde'
+    pattern = '*a?c*'
+    expected = True
+    result = patternmatch(string, pattern)
+    if result != expected:
+        print('! test 4 expected', expected, 'but got', result)
+
+    string = 'abcde'
+    pattern = 'a*'
+    expected = True
+    result = patternmatch(string, pattern)
+    if result != expected:
+        print('! test 5 expected', expected, 'but got', result)
+
+    string = 'abcde'
+    pattern = 'ae'
+    expected = False
+    result = patternmatch(string, pattern)
+    if result != expected:
+        print('! test 6 expected', expected, 'but got', result)
+
+    string = 'abcde'
+    pattern = 'ad?'
+    expected = False
+    result = patternmatch(string, pattern)
+    if result != expected:
+        print('! test 7 expected', expected, 'but got', result)
+
+    string = 'abcde'
+    pattern = 'abc?'
+    expected = False
+    result = patternmatch(string, pattern)
+    if result != expected:
+        print('! test 8 expected', expected, 'but got', result)
+
+    string = 'abcde'
+    pattern = 'abcd?'
+    expected = True
+    result = patternmatch(string, pattern)
+    if result != expected:
+        print('! test 9 expected', expected, 'but got', result)
+
+    string = 'a'
+    pattern = '?'
+    expected = True
+    result = patternmatch(string, pattern)
+    if result != expected:
+        print('! test 10 expected', expected, 'but got', result)
+    pass
