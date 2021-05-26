@@ -26,24 +26,19 @@ def is_wildcard(char):
     return False
 
 
-def is_index_of_last_non_wildcard(index, string):
+def get_index_of_last_non_wildcard(string):
     """
     Determines whether a given index is the index of the last char in a given string
-    :param index: int of a valid index in string
     :param string: any string to test
     :return: True if the index is of the last char in string; False if not
     """
     # TODO: raise argument_error if invalid index
-    index += 1
-    while index < len(string):
+    for index in range(len(string) - 1, 0, -1):
         if string[index] not in pattern_matcher.wildcard_chars:
             # there is another non-wildcard later in the string
-            return False
+            return index
 
         index += 1
-
-    # passed the check
-    return True
 
 
 def patternmatch(string, p):
@@ -57,6 +52,7 @@ def patternmatch(string, p):
     """
     MATCH_ALL = pattern_matcher.match_all
     MATCH_1 = pattern_matcher.match_1
+    index_of_last_non_wildcard = get_index_of_last_non_wildcard(p)
 
     # scan pattern, stopping at chars
     index_string = 0
@@ -64,7 +60,7 @@ def patternmatch(string, p):
         if not is_wildcard(p[index_p]):
             if p[index_p] == string[index_string]:
                 # chars match; step string pointer, because there's more to compare
-                if not is_index_of_last_non_wildcard(index_p, p):
+                if index_p != index_of_last_non_wildcard:
                     index_string += 1
             elif index_p > 0:
                 previous_pattern_char = p[index_p - 1]
