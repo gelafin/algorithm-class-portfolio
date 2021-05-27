@@ -18,7 +18,7 @@ def get_tesla_neighbors(node, highest_x, highest_y):
              If the node has no valid neighbors, returns an empty list
     """
     x, y = node
-    list_out = list()
+    list_out = []
 
     # add 1 in both directions and return if valid
     if x + 1 <= highest_x:
@@ -66,8 +66,6 @@ def getTesla(M):
                 # this neighbor's path is the new best
                 max_hp_table[neighbor_x][neighbor_y] = total_hp_from_current_node
                 itinerary.put(neighbor)
-
-    print('debug count', debug_count)
 
     final_max_hp = max_hp_table[len(max_hp_table[0]) - 1][len(max_hp_table) - 1]
     return calculate_min_survival_hp(final_max_hp)

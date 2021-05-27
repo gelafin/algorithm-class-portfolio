@@ -15,7 +15,7 @@ def get_tesla_neighbors(node):
              If the node has no valid neighbors, returns an empty list
     """
     x, y = node
-    list_out = list()
+    list_out = []
 
     # subtract 1 in both directions and return if valid
     if x - 1 >= 0:
