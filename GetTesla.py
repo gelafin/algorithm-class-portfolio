@@ -73,7 +73,6 @@ def getTesla(M):
     # keep a table of results for max hp possible at each node
     # initialize to guarantee overwrite on first comparison
     max_hp_table = [[None for _ in range(len(M[0]))] for _ in range(len(M))]
-    max_hp_table[0][0] = M[0][0]
 
     destination_node = len(M[0]) - 1, len(M) - 1
     destination_node_max_hp = get_tesla_recursive(destination_node, M, max_hp_table)
