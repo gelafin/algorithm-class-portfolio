@@ -47,10 +47,12 @@ def getTesla(M):
     # fill the max hp table by visiting every valid node
     itinerary = SimpleQueue()
     itinerary.put((0, 0))  # nodes stored as (x, y) coordinates
+    debug_count = 0
     while itinerary.qsize() > 0:
         current_node = itinerary.get()
         current_x, current_y = current_node
         current_node_max_hp = max_hp_table[current_x][current_y]
+        debug_count += 1
 
         for neighbor in get_tesla_neighbors(current_node, len(M[0]) - 1, len(M) - 1):
             neighbor_x, neighbor_y = neighbor
@@ -58,11 +60,13 @@ def getTesla(M):
 
             # calculate max hp to reach each neighbor
             total_hp_from_current_node = current_node_max_hp + neighbor_hp
-            neighbor_max_hp = max(max_hp_table[neighbor_x][neighbor_y], total_hp_from_current_node)
-            max_hp_table[neighbor_x][neighbor_y] = neighbor_max_hp
 
-            # we need to visit their neighbors too
-            itinerary.put(neighbor)
+            if total_hp_from_current_node > max_hp_table[neighbor_x][neighbor_y]:
+                # this neighbor's path is the new best
+                max_hp_table[neighbor_x][neighbor_y] = total_hp_from_current_node
+                itinerary.put(neighbor)
+
+    print('debug count', debug_count)
 
     # if max hp path is > 0, return 0 bc no health is needed
     final_max_hp = max_hp_table[len(max_hp_table[0]) - 1][len(max_hp_table) - 1]
